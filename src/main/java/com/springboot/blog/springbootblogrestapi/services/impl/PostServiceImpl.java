@@ -6,6 +6,7 @@ import com.springboot.blog.springbootblogrestapi.payload.PostDto;
 import com.springboot.blog.springbootblogrestapi.payload.PostResponse;
 import com.springboot.blog.springbootblogrestapi.repositories.PostRepository;
 import com.springboot.blog.springbootblogrestapi.services.PostService;
+import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -21,8 +22,11 @@ public class PostServiceImpl implements PostService {
 
     private final PostRepository postRepository;
 
-    public PostServiceImpl(PostRepository postRepository) {
+    private final ModelMapper modelMapper;
+
+    public PostServiceImpl(PostRepository postRepository, ModelMapper modelMapper) {
         this.postRepository = postRepository;
+        this.modelMapper = modelMapper;
     }
 
     @Override
@@ -89,21 +93,23 @@ public class PostServiceImpl implements PostService {
     }
 
     public Post mapDtoToPost(PostDto postDto){
-        Post post = new Post();
+        Post post = modelMapper.map(postDto, Post.class);
+       /* Post post = new Post();
         post.setId(postDto.getId());
         post.setTitle(postDto.getTitle());
         post.setContent(postDto.getContent());
-        post.setDescription(postDto.getDescription());
+        post.setDescription(postDto.getDescription());*/
 
         return post;
     }
 
     public PostDto mapPostToDto(Post post){
-        PostDto postResponse = new PostDto();
+        PostDto postDto = modelMapper.map(post, PostDto.class);
+        /*PostDto postResponse = new PostDto();
         postResponse.setId(post.getId());
         postResponse.setTitle(post.getTitle());
         postResponse.setContent(post.getContent());
-        postResponse.setDescription(post.getDescription());
-        return postResponse;
+        postResponse.setDescription(post.getDescription());*/
+        return postDto;
     }
 }
